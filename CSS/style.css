@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.jumbotron {
+    background-size: cover;
+    color: rgb(255, 255, 255);
+    opacity: 70%;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

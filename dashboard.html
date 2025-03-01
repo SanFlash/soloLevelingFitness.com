@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Solo Leveling Fitness Challenge</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/style.css" rel="stylesheet">
+    <style>
+        
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: auto;
+            text-align: center;
+        }
+
+    
+        .navbar {
+            position: relative;
+            z-index: 2;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Info Cards */
+        .card {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            text-align: center;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .btn-primary {
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .progress {
+            height: 20px;
+        }
+
+
+        .leaderboard {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 3;
+            opacity: 80%;
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .popup-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay loop muted id="bg-video">
+            <source src="Media/SoloLeveling.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Solo Leveling</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="update.html">Challenges</a></li>
+                <li class="nav-item"><a class="nav-link" href="progress.html">Titles</a></li>
+                <li class="nav-item"><a class="nav-link" href="update.html">Hunters Rank</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <section class="container text-center my-5 content">
+        <h2 class="mb-4">Welcome, <span id="Sname"></span></h2>
+        <div class="popup" id="imagePopup">
+            <button class="close-btn" onclick="closePopup()">x</button>
+            <div class="image-container">
+                <img src="Media/messagebox.png" alt="Awakened Beast">
+                <p class="popup-message" id="popupMessage">You Have Awakened!</p>
+            </div>
+        </div>
+        <audio id="popupSound">
+            <source src="Media/solo_leveling_system.mp3" type="audio/mp3">
+        </audio>
+        
+        <p class="quote" id="motivationQuote">"Push harder than yesterday if you want a different tomorrow."</p>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card p-3">
+                    <h4 class="card-title">Your Goal</h4>
+                    <p id="fitnessGoal">Making yourself Shadow Monarch</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card p-3">
+                    <h4 class="card-title">Accept Challenge</h4>
+                    <p id="currentChallenge">Solo Leveling 100-Day Workout</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h4>Your Leveling</h4>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" id="dashboardProgressBar" style="width: 0%;">0%</div>
+            </div>
+            <p id="dashboardRankText" class="text-center mt-2">Current Rank: Mortal</p>
+        </div>
+
+        <div class="mt-4 leaderboard">
+            <h4>Top Fitness Hunters</h4>
+            <ul class="list-unstyled">
+                <li>🥇 John Doe - 90%</li>
+                <li>🥈 Jane Smith - 85%</li>
+                <li>🥉 Alex Brown - 80%</li>
+            </ul>
+        </div>
+
+        <button class="btn btn-primary mt-3">Kill More calories</button>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Solo Leveling Challenge. All rights reserved. @Satyendra Namdeo</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        let db;
+        let request = indexedDB.open("SoloLevelingDB", 1);
+    
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            checkUserSession();
+        };
+    
+        request.onerror = function (event) {
+            console.error("IndexedDB error: ", event.target.error);
+        };
+    
+        function checkUserSession() {
+            let loggedInEmail = localStorage.getItem("loggedInUser");
+    
+            if (!loggedInEmail) {
+                alert("Please log in first.");
+                window.location.href = "login.html";
+                return;
+            }
+    
+            let transaction = db.transaction(["users"], "readonly");
+            let store = transaction.objectStore("users");
+            let getRequest = store.get(loggedInEmail);
+    
+            getRequest.onsuccess = function () {
+                let user = getRequest.result;
+                if (user) {
+                    document.getElementById("popupMessage").innerText = `You Have Awakened, ${user.name}!`;
+                    
+                    // Delay to ensure the popup is visible before audio plays
+                    setTimeout(() => {
+                        openPopup();
+                    }, 500);
+                } else {
+                    alert("User not found. Please log in again.");
+                    localStorage.removeItem("loggedInUser");
+                    window.location.href = "login.html";
+                }
+            };
+    
+            getRequest.onerror = function () {
+                alert("Error retrieving user data.");
+            };
+        }
+    
+        function openPopup() {
+            let popup = document.getElementById("imagePopup");
+            popup.style.display = "block"; // Show popup
+    
+            // Autoplay audio by simulating user interaction
+            playAudio();
+        }
+    
+        function playAudio() {
+            let audio = document.getElementById("popupSound");
+    
+            // Try playing audio immediately
+            let playPromise = audio.play();
+    
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Audio played successfully.");
+                }).catch(error => {
+                    console.log("Autoplay blocked, adding user interaction event...");
+                    
+                    // Attach event listener for first user interaction
+                    document.addEventListener("click", () => {
+                        audio.play();
+                    }, { once: false });
+                });
+            }
+        }
+    
+        function closePopup() {
+            document.getElementById("imagePopup").style.display = "none";
+        }
+    
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            alert("Logged out successfully!");
+            window.location.href = "login.html";
+        }
+    </script>
+    
+
+    
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Get progress from localStorage
+        let storedProgress = JSON.parse(localStorage.getItem("userProgress"));
+
+        if (storedProgress) {
+            document.getElementById("dashboardProgressBar").style.width = storedProgress.progress + "%";
+            document.getElementById("dashboardProgressBar").textContent = storedProgress.progress + "%";
+            document.getElementById("dashboardRankText").textContent = `Current Rank: ${storedProgress.rank}`;
+        }
+    });
+</script>
+
+
+    <script>
+        // Motivation Quotes
+        const quotes = [
+            "The pain you feel today will be the strength you feel tomorrow.",
+            "Push harder than yesterday if you want a different tomorrow.",
+            "Sweat now, shine later!",
+            "You don’t have to be extreme, just consistent.",
+            "Make progress, not excuses!"
+        ];
+        document.getElementById('motivationQuote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    </script>
+
+
+    <script>
+        
+if (!window.db) {
+    let request = indexedDB.open("SoloLevelingDB", 1);
+
+    request.onsuccess = function (event) {
+        window.db = event.target.result; 
+        fetchUserName(); 
+    };
+
+    request.onerror = function (event) {
+        console.error("IndexedDB error: ", event.target.error);
+    };
+}
+
+function fetchUserName() {
+    let loggedInEmail = localStorage.getItem("loggedInUser"); 
+
+    if (!loggedInEmail || !window.db) return; 
+
+    let transaction = window.db.transaction(["users"], "readonly");
+    let store = transaction.objectStore("users");
+    let getRequest = store.get(loggedInEmail);
+
+    getRequest.onsuccess = function () {
+        let user = getRequest.result;
+        if (user) {
+            document.getElementById("Sname").innerText = user.Sname; 
+        }
+    };
+
+    getRequest.onerror = function () {
+        console.error("Error retrieving user data.");
+    };
+}
+
+    </script>
+
+</body>
+</html>

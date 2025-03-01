@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress - Solo Leveling Fitness Challenge</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/style.css" rel="stylesheet">
+    <style>
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .nav-tabs .nav-link {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            margin-right: 5px;
+        }
+        .nav-tabs .nav-link.active {
+            background: rgba(255, 255, 255, 0.5);
+            color: black;
+        }
+        .workout-day {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .progress {
+            height: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay loop muted>
+            <source src="Media/SoloLeveling.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Solo Leveling</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="update.html">Challenges</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Titles</a></li>
+                <li class="nav-item"><a class="nav-link" href="update.html">Hunters Rank</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container my-5 content">
+        <h2 class="text-center mb-4">Your Solo Leveling Progress</h2>
+        
+        <div id="workoutDays"></div>
+
+        <div class="mt-4">
+            <h4>Your Leveling</h4>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" id="progressBar" style="width: 0%;">0%</div>
+            </div>
+            <p id="rankText" class="text-center mt-2">Current Rank: Mortal</p>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Solo Leveling Challenge. All rights reserved. @Satyendra Namdeo</p>
+    </footer>
+
+    <script>
+        const workoutContainer = document.getElementById("workoutDays");
+        const progressBar = document.getElementById("progressBar");
+        const rankText = document.getElementById("rankText");
+
+        const levels = [
+            { days: 7, rank: "E-Rank Hunter", progress: 10 },
+            { days: 14, rank: "D-Rank Hunter", progress: 20 },
+            { days: 24, rank: "C-Rank Hunter", progress: 30 },
+            { days: 38, rank: "B-Rank Hunter", progress: 45 },
+            { days: 52, rank: "A-Rank Hunter", progress: 60 },
+            { days: 70, rank: "S-Rank Hunter", progress: 75 },
+            { days: 80, rank: "SS-Rank Hunter", progress: 85 },
+            { days: 90, rank: "SSS-Rank Hunter", progress: 95 },
+            { days: 100, rank: "Shadow Monarch", progress: 100 }
+        ];
+
+        const exercises = [
+            "Push-ups", "Squats", "Jumping Jacks", "Plank", "Burpees", "Lunges", "Mountain Climbers"
+        ];
+
+        function getRandomExercises() {
+            let shuffled = exercises.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 3);
+        }
+
+        function createWorkoutDays() {
+            for (let i = 1; i <= 100; i++) {
+                let exerciseList = getRandomExercises();
+                let dayDiv = document.createElement("div");
+                dayDiv.className = "workout-day";
+                dayDiv.innerHTML = `
+                    <h5>Day ${i}</h5>
+                    <label><input type="checkbox" class="exercise"> ${exerciseList[0]}</label><br>
+                    <label><input type="checkbox" class="exercise"> ${exerciseList[1]}</label><br>
+                    <label><input type="checkbox" class="exercise"> ${exerciseList[2]}</label><br>
+                    <label><input type="checkbox" class="final-check" disabled> Completed All</label>
+                `;
+                workoutContainer.appendChild(dayDiv);
+            }
+        }
+
+        function updateProgress() {
+            let completedDays = 0;
+            let allDays = document.querySelectorAll(".workout-day");
+
+            allDays.forEach((day, index) => {
+                let checkboxes = day.querySelectorAll(".exercise");
+                let finalCheck = day.querySelector(".final-check");
+
+                // Enable final checkbox only if all 3 exercises are checked
+                let allChecked = [...checkboxes].every(cb => cb.checked);
+                finalCheck.disabled = !allChecked;
+
+                // Count completed days
+                if (finalCheck.checked) {
+                    completedDays++;
+                }
+            });
+
+            // Check the highest level achieved
+            let currentLevel = levels.find(l => completedDays >= l.days) || { rank: "Mortal", progress: 0 };
+            
+            // Check if user missed a day, reduce progress to nearest lower rank
+            let previousLevel = levels.find(l => completedDays - 1 < l.days) || { rank: "Mortal", progress: 0 };
+
+            if (completedDays < previousLevel.days) {
+                currentLevel = previousLevel;
+            }
+
+            // Update progress bar and rank text
+            progressBar.style.width = currentLevel.progress + "%";
+            progressBar.textContent = currentLevel.progress + "%";
+            rankText.textContent = `Current Rank: ${currentLevel.rank}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            createWorkoutDays();
+
+            // Listen to checkbox changes
+            document.getElementById("workoutDays").addEventListener("change", updateProgress);
+        });
+    </script>
+    <script>
+        function updateProgress() {
+            let completedDays = 0;
+            let allDays = document.querySelectorAll(".workout-day");
+    
+            allDays.forEach((day) => {
+                let finalCheck = day.querySelector(".final-check");
+                if (finalCheck.checked) {
+                    completedDays++;
+                }
+            });
+    
+            // Rank Progression System
+            const levels = [
+                { days: 7, rank: "E-Rank Hunter", progress: 10 },
+                { days: 14, rank: "D-Rank Hunter", progress: 20 },
+                { days: 24, rank: "C-Rank Hunter", progress: 30 },
+                { days: 38, rank: "B-Rank Hunter", progress: 45 },
+                { days: 52, rank: "A-Rank Hunter", progress: 60 },
+                { days: 70, rank: "S-Rank Hunter", progress: 75 },
+                { days: 80, rank: "SS-Rank Hunter", progress: 85 },
+                { days: 90, rank: "SSS-Rank Hunter", progress: 95 },
+                { days: 100, rank: "Shadow Monarch", progress: 100 }
+            ];
+    
+            // Get the user's current level
+            let currentLevel = levels.find(l => completedDays >= l.days) || { rank: "Mortal", progress: 0 };
+    
+            // Save progress to localStorage
+            localStorage.setItem("userProgress", JSON.stringify(currentLevel));
+    
+            // Update UI
+            document.getElementById("progressBar").style.width = currentLevel.progress + "%";
+            document.getElementById("progressBar").textContent = currentLevel.progress + "%";
+            document.getElementById("rankText").textContent = `Current Rank: ${currentLevel.rank}`;
+        }
+    
+        // Load stored progress when page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            let storedProgress = JSON.parse(localStorage.getItem("userProgress"));
+            if (storedProgress) {
+                document.getElementById("progressBar").style.width = storedProgress.progress + "%";
+                document.getElementById("progressBar").textContent = storedProgress.progress + "%";
+                document.getElementById("rankText").textContent = `Current Rank: ${storedProgress.rank}`;
+            }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
