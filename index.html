@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Leveling Fitness Challenge</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Content*/
+        .content {
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.11); 
+            color: white;
+            padding: 20px;
+            border-radius: 2px;
+        }
+
+        
+        .navbar {
+            position: relative;
+            z-index: 2;
+        }
+        .card{
+            background-color: #00000075;
+            color: white;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <video autoplay loop id="bg-video">
+            <source src="Media/SoloLeveling.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+        <a class="navbar-brand" href="#">Solo Leveling</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="jumbotron jumbotron-fluid text-center content">
+        <div class="container">
+            <h1 class="display-4"><b>Welcome to the Solo Leveling Fitness Challenge!</b></h1>
+            <p class="lead">Get ready to transform your body and mind with our exciting fitness challenge.</p>
+            <a href="Pages/signup.html" class="btn btn-primary btn-lg">Join Now</a>
+        </div>
+    </header>
+
+    <section class="container text-center my-5 content">
+        <h2>Start Transformation</h2>
+        <p>Unleash your inner strength with SoloLeveling</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Step 1</h5>
+                        <p class="card-text">Sign up for the challenge and set your goals.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Step 2</h5>
+                        <p class="card-text">Complete the daily quest.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Step 3</h5>
+                        <p class="card-text">Track your progress and stay motivated!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Solo Leveling Challenge. All rights reserved. @Satyendra Namdeo</p>
+    </footer>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            let video = document.getElementById('bg-video');
+            video.muted = true; 
+            video.play();
+        });
+    </script>
+
+</body>
+</html>
